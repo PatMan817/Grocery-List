@@ -13,8 +13,11 @@ datasource db {
 model ListItem {
     id        String @id @default(cuid())
     productId String
+    imageType String
     userId    String
+    quantity  Int
     user      User   @relation(fields: [userId], references: [id])
+    @@unique([userId, productId])
 }
 
 // NEXT-Auth Stuff

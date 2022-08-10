@@ -8,18 +8,30 @@ export default function GrocerySearch() {
   async function handleSearch(e) {
     e.preventDefault();
     try {
-      const response = await (
-        await fetch(`api/search?query=${searchInputRef.current.value}`)
-      ).json();
+      let response = await fetch(
+        `api/search?query=${searchInputRef.current.value}`
+      );
+      response = await response.json();
       setSearchResults(response.products);
     } catch (error) {
       return console.error(error);
     }
   }
 
-  function handleSelect(e) {
-    console.log(e.target.getAttribute("name"));
-    setSearchResults(null);
+  async function handleSelect(e) {
+    const clickedItem = e.target.getAttribute("name");
+    const imagetype = e.target.getAttribute("imagetype");
+    let response = await fetch(`api/addToDB`, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8'
+      },
+      body: JSON.stringify({
+        clickedItem: clickedItem,
+        imagetype: imagetype
+      }),
+    });
+    //setSearchResults(null);
   }
 
   return (
@@ -34,9 +46,10 @@ export default function GrocerySearch() {
         <button type="submit">Search</button>
       </form>
       {searchResults?.map((result) => (
-        <div key={result.id} name={result.id} onClick={handleSelect}>
-          <p name={result.id}>{result.title}</p>
+        <div key={result.id} name={result.id} imagetype={result.imageType} onClick={handleSelect}>
+          <p name={result.id} imagetype={result.imageType}>{result.title}</p>
           <Image
+            imagetype={result.imageType}
             name={result.id}
             width={90}
             height={90}
