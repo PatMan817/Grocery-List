@@ -13,6 +13,7 @@ datasource db {
 model ListItem {
     id        String @id @default(cuid())
     productId String
+    title     String
     imageType String
     userId    String
     quantity  Int

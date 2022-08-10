@@ -4,9 +4,21 @@ import { getSession } from "next-auth/react";
 import GrocerySearch from "../components/GrocerySearch";
 import GroceryList from "../components/GroceryList";
 import { useState } from "react";
+import { PrismaClient } from "@prisma/client";
 
-export default function Home({ session }) {
-  const [itemList, setItemList] = useState([]);
+export default function Home({ session, listitems }) {
+  const [itemList, setItemList] = useState(listitems);
+
+  async function getItems() {
+    try {
+      let items = await fetch("api/getListItems");
+      items = await items.json();
+      setItemList(items)
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <>
       <Head>
@@ -26,8 +38,8 @@ export default function Home({ session }) {
         `}</style>
         <LoginButton />
         <h1>Welcome to your Grocery List!</h1>
-        <GrocerySearch setItemList={setItemList} />
-        <GroceryList itemList={itemList} />
+        <GrocerySearch getItems={getItems}/>
+        <GroceryList itemList={itemList} setItemList={setItemList}/>
       </main>
     </>
   );
@@ -45,9 +57,24 @@ export async function getServerSideProps({ req }) {
     };
   }
 
+  const prisma = new PrismaClient()
+    try {
+      var listitems = await prisma.listItem.findMany({
+        where: {
+          userId: session.user.id
+        }
+      })
+      await prisma.$disconnect()
+    } catch (error) {
+      console.error(error)
+      await prisma.$disconnect()
+      process.exit(1)
+    }
+
   return {
     props: {
       session,
+      listitems
     },
   };
 }

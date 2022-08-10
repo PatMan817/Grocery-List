@@ -1,20 +1,14 @@
-import Image from "next/future/image";
 import React from "react";
+import GroceryListItem from "./GroceryListItem";
 
-export default function GroceryList({ itemList }) {
+export default function GroceryList({itemList, setItemList}) {
+  let index = -1
   return (
     <>
       {itemList?.map((item) => {
+        index++
         return (
-        <div key={item.id} name={item.id}>
-          <p>{item.title}</p>
-          <Image
-            width={90}
-            height={90}
-            src={`https://spoonacular.com/productImages/${item.id}-312x231.${item.imageType}`}
-            alt="item-image"
-          />
-        </div>
+          <GroceryListItem key={item.id} item={item} index={index} itemList={itemList} setItemList={setItemList}/>
         );
       })}
     </>

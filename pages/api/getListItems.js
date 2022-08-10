@@ -3,29 +3,16 @@ import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "./auth/[...nextAuth]";
 export default async function search(req, res) {
   const session = await unstable_getServerSession(req, res, authOptions);
-  if (session && req.method === "POST") {
+  if (session && req.method === "GET") {
     const prisma = new PrismaClient()
     try {
-      const listitem = await prisma.listItem.upsert({
+      const listitems = await prisma.listItem.findMany({
         where: {
-          userId_productId: {
-            userId: session.user.id,
-            productId: req.body.clickedItem
-          }
-        },
-        update: {
-
-        },
-        create: {
-          productId: req.body.clickedItem,
-          userId: session.user.id,
-          imageType: req.body.imagetype,
-          quantity: 1,
-          title: req.body.title
+          userId: session.user.id
         }
       })
       await prisma.$disconnect()
-      res.send(listitem);
+      res.send(listitems);
     } catch (error) {
       console.error(error)
       await prisma.$disconnect()
