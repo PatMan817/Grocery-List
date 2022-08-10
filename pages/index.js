@@ -3,8 +3,10 @@ import LoginButton from "../components/login-btn";
 import { getSession } from "next-auth/react";
 import GrocerySearch from "../components/GrocerySearch";
 import GroceryList from "../components/GroceryList";
+import { useState } from "react";
 
 export default function Home({ session }) {
+  const [itemList, setItemList] = useState([]);
   return (
     <div>
       <Head>
@@ -19,8 +21,8 @@ export default function Home({ session }) {
       <main>
         <LoginButton />
         <h1>Welcome to your Grocery List!</h1>
-        <GrocerySearch />
-        <GroceryList />
+        <GrocerySearch setItemList={setItemList} />
+        <GroceryList itemList={itemList} />
       </main>
     </div>
   );
