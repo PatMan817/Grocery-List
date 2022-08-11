@@ -14,13 +14,13 @@ export default async function search(req, res) {
           }
         },
         update: {
-
+          quantity: {increment: Number(req.body.quantity)}
         },
         create: {
           productId: req.body.clickedItem,
           userId: session.user.id,
           imageType: req.body.imagetype,
-          quantity: 1,
+          quantity: Number(req.body.quantity),
           title: req.body.title
         }
       })

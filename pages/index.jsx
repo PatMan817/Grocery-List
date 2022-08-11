@@ -33,10 +33,17 @@ export default function Home({ session, listitems }) {
       <main>
         <style jsx>{`
           main {
-            text-align: center;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+          }
+          h1 {
+            background-color: white;
+            padding: 5px;
+            border-radius: 10%;
           }
         `}</style>
-        <LoginButton />
+        <LoginButton/>
         <h1>Welcome to your Grocery List!</h1>
         <GrocerySearch getItems={getItems}/>
         <GroceryList itemList={itemList} setItemList={setItemList}/>

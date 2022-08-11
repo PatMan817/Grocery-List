@@ -1,7 +1,7 @@
 import Image from "next/future/image";
 import React, { useRef, useState } from "react";
 
-export default function GrocerySearch({getItems}) {
+export default function GrocerySearch({ getItems }) {
   const [searchResults, setSearchResults] = useState(null);
   const searchInputRef = useRef();
 
@@ -19,23 +19,27 @@ export default function GrocerySearch({getItems}) {
   }
 
   async function handleSelect(e) {
-    const index = e.target.getAttribute("name")
+    const index = e.target.getAttribute("name");
     const clickedItem = searchResults[index].id;
     const imagetype = searchResults[index].imageType;
-    const title = searchResults[index].title
-    let response = await fetch(`api/addToDB`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json;charset=utf-8",
-      },
-      body: JSON.stringify({
-        clickedItem: clickedItem.toString(),
-        imagetype: imagetype,
-        title: title
-      }),
-    });
-    setSearchResults(null);
-    getItems()
+    const title = searchResults[index].title;
+    const quantity = prompt("How many?");
+    if (quantity) {
+      let response = await fetch(`api/addToDB`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify({
+          clickedItem: clickedItem.toString(),
+          imagetype: imagetype,
+          title: title,
+          quantity: quantity,
+        }),
+      });
+      setSearchResults(null);
+      getItems();
+    }
   }
   let index = -1;
   return (
@@ -49,27 +53,63 @@ export default function GrocerySearch({getItems}) {
         />
         <button type="submit">Search</button>
       </form>
-      {searchResults?.map((result) => {
-        index++
-        return (
-          <div
-            key={result.id}
-            name={index}
-            onClick={handleSelect}
-          >
-            <p name={index}>
-              {result.title}
-            </p>
-            <Image
+      <div className="searchResults">
+        <style jsx>{`
+          .searchResults {
+            background-color: mediumseagreen;
+            position: absolute;
+            text-align: center;
+            border-radius: 3%;
+          }
+          .searchItem {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: white;
+            padding-bottom: 5px;
+            margin: 10px;
+            border-radius: 5%;
+            cursor: pointer;
+          }
+          .searchItem:hover {
+            background-color: lightgray;
+          }
+          button {
+            position: absolute;
+            right: 5%;
+            top: 1%;
+          }
+        `}</style>
+
+        {searchResults && (
+          <>
+            <button onClick={() => {setSearchResults(null)}}>Cancel</button>
+            <h1>
+              <u>Results</u>
+            </h1>
+          </>
+        )}
+        {searchResults?.map((result) => {
+          index++;
+          return (
+            <div
+              key={result.id}
               name={index}
-              width={90}
-              height={90}
-              src={`https://spoonacular.com/productImages/${result.id}-312x231.${result.imageType}`}
-              alt="result-image"
-            />
-          </div>
-        );
-      })}
+              onClick={handleSelect}
+              className="searchItem"
+            >
+              <p name={index}>{result.title}</p>
+              <Image
+                name={index}
+                width={90}
+                height={90}
+                src={`https://spoonacular.com/productImages/${result.id}-312x231.${result.imageType}`}
+                alt="result-image"
+              />
+            </div>
+          );
+        })}
+      </div>
     </>
   );
 }
