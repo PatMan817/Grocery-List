@@ -3,7 +3,7 @@ export default function LoginButton() {
   const { data: session } = useSession()
   if (session) {
     return (
-      <div style={{position: 'absolute', left: '0px', backgroundColor: 'white', padding: '2px', borderRadius: '6%'}}>
+      <div style={{position: 'absolute', left: '0px', backgroundColor: 'white', padding: '2px', borderRadius: '2%'}}>
         Signed in as {session.user.email} <br />
         <button onClick={() => signOut()}>Sign out</button>
       </div>

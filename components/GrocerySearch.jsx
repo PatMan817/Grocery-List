@@ -60,6 +60,7 @@ export default function GrocerySearch({ getItems }) {
             position: absolute;
             text-align: center;
             border-radius: 3%;
+            z-index: 2;
           }
           .searchItem {
             display: flex;
@@ -68,7 +69,7 @@ export default function GrocerySearch({ getItems }) {
             background-color: white;
             padding-bottom: 5px;
             margin: 10px;
-            border-radius: 5%;
+            border-radius: 2%;
             cursor: pointer;
           }
           .searchItem:hover {

@@ -1,5 +1,6 @@
 import Image from "next/future/image";
 import React, { useState } from "react";
+import { useAutoAnimate } from '@formkit/auto-animate/react'
 
 export default function GroceryListItem({
   item,
@@ -9,6 +10,7 @@ export default function GroceryListItem({
 }) {
   const [expanded, setExpanded] = useState(false);
   const [itemInfo, setItemInfo] = useState(null);
+  const [parent] = useAutoAnimate(/* optional config */)
 
   async function removeItem() {
     let newItemList = itemList.slice();
@@ -61,14 +63,15 @@ export default function GroceryListItem({
   }
 
   return (
-    <div onClick={handleExpand} name={item.id} className="itemWrapper">
+    <div ref={parent} onClick={handleExpand} name={item.id} className="itemWrapper">
       <style jsx>{`
         .itemWrapper {
-          background-color: whitesmoke;
-          border-radius: 5%;
+          background-color: white;
+          border-radius: 2%;
           padding: 0px 5px 5px 5px;
           margin: 5px;
           cursor: pointer;
+          border: 2px solid black;
         }
         .itemWrapper:hover {
           background-color: lightgray;
@@ -77,6 +80,9 @@ export default function GroceryListItem({
           display: flex;
           align-items: center;
           justify-content: space-between;
+        }
+        .extraInfo {
+          background-color: whitesmoke
         }
       `}</style>
       <p>{item.title}</p>
@@ -95,7 +101,7 @@ export default function GroceryListItem({
         <button onClick={removeItem}>×</button>
       </div>
       {expanded && (
-        <div style={{ display: "flex" }}>
+        <div className="extraInfo" style={{ display: "flex" }}>
           <div>
             <p>Aisle:</p>
             <p>{itemInfo?.aisle}</p>
@@ -105,7 +111,7 @@ export default function GroceryListItem({
             <div style={{ display: "flex" }}>
               {itemInfo?.nutrition.nutrients.map((item) => {
                 return (
-                  <div style={{ margin: "0px 5px" }}>
+                  <div key={item.productId} style={{ margin: "0px 5px" }}>
                     <p>{item.name}</p>
                     <p>
                       {item.amount}
