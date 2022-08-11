@@ -3,26 +3,17 @@ import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "./auth/[...nextAuth]";
 export default async function addToDB(req, res) {
   const session = await unstable_getServerSession(req, res, authOptions);
-  if (session && req.method === "POST") {
+  if (session && req.method === "PUT") {
     const prisma = new PrismaClient()
     try {
-      const listitem = await prisma.listItem.upsert({
+      const listitem = await prisma.listItem.update({
         where: {
           userId_productId: {
             userId: session.user.id,
-            productId: req.body.clickedItem
+            productId: req.body.productId
           }
         },
-        update: {
-          quantity: {increment: Number(req.body.quantity)}
-        },
-        create: {
-          productId: req.body.clickedItem,
-          userId: session.user.id,
-          imageType: req.body.imagetype,
-          quantity: Number(req.body.quantity),
-          title: req.body.title
-        }
+        data: { quantity: {increment: (req.body.direction === 'increment' ? 1 : -1)}}
       })
       await prisma.$disconnect()
       res.send(listitem);

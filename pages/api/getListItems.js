@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "./auth/[...nextAuth]";
-export default async function search(req, res) {
+export default async function getListItems(req, res) {
   const session = await unstable_getServerSession(req, res, authOptions);
   if (session && req.method === "GET") {
     const prisma = new PrismaClient()
