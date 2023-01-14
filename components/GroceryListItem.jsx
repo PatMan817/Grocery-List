@@ -65,13 +65,17 @@ export default function GroceryListItem({
   return (
     <div ref={parent} onClick={handleExpand} name={item.id} className="itemWrapper">
       <style jsx>{`
+        p {
+          align-items: center;
+        }
         .itemWrapper {
-          background-color: white;
+          background-color: lightgreen;
           border-radius: 2%;
           padding: 0px 5px 5px 5px;
           margin: 5px;
           cursor: pointer;
           border: 2px solid black;
+          width: 90%;
         }
         .itemWrapper:hover {
           background-color: lightgray;
@@ -84,15 +88,32 @@ export default function GroceryListItem({
         .extraInfo {
           background-color: whitesmoke
         }
+        .imageWrapper {
+          display: flex;
+          border: 2px solid black;
+        }
+        .extraInfo {
+          display: flex;
+          padding: 0px 5px;
+        }
+        button {
+          height: 25px;
+          border-radius: 50%;
+          aspect-ratio: 1/1;
+          cursor: pointer;
+        }
       `}</style>
       <p>{item.title}</p>
       <div className="itemInfo">
+        <div className="imageWrapper">
+
         <Image
           width={90}
           height={90}
           src={`https://spoonacular.com/productImages/${item.productId}-312x231.${item.imageType}`}
           alt="item-image"
-        />
+          />
+        </div>
         <div style={{ display: "flex", alignItems: "center" }}>
           <button name="decrement" onClick={handleQuantityChange}>-</button>
           <p style={{ margin: "0px 5px" }}>Quantity: {item.quantity}</p>
@@ -101,7 +122,7 @@ export default function GroceryListItem({
         <button onClick={removeItem}>×</button>
       </div>
       {expanded && (
-        <div className="extraInfo" style={{ display: "flex" }}>
+        <div className="extraInfo">
           <div>
             <p>Aisle:</p>
             <p>{itemInfo?.aisle}</p>
