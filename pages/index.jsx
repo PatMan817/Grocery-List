@@ -33,6 +33,10 @@ export default function Home({ session, listitems }) {
       <main>
         <style jsx global>{`
           body {
+            background-image: url(https://www.bhg.com.au/media/19982/nightshade.jpg);
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
             font-family: sans-serif;
           }
           main {
