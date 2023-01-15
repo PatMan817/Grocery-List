@@ -83,18 +83,16 @@ export default function GrocerySearch({ getItems }) {
             }
           `}</style>
 
-          <>
-            <button
-              onClick={() => {
-                setSearchResults(null);
-              }}
-            >
-              Cancel
-            </button>
-            <h1>
-              <u>Results</u>
-            </h1>
-          </>
+          <button
+            onClick={() => {
+              setSearchResults(null);
+            }}
+          >
+            Cancel
+          </button>
+          <h1>
+            <u>Results</u>
+          </h1>
           {searchResults?.map((result) => {
             index++;
             return (
