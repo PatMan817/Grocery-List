@@ -41,7 +41,6 @@ export default function GrocerySearch({ getItems }) {
       getItems();
     }
   }
-  let index = -1;
   return (
     <>
       <form onSubmit={handleSearch}>
@@ -93,9 +92,7 @@ export default function GrocerySearch({ getItems }) {
           <h1>
             <u>Results</u>
           </h1>
-          {searchResults?.map((result) => {
-            index++;
-            return (
+          {searchResults?.map((result, index) => (
               <div
                 key={result.id}
                 name={index}
@@ -111,8 +108,8 @@ export default function GrocerySearch({ getItems }) {
                   alt="result-image"
                 />
               </div>
-            );
-          })}
+            ))
+          }
         </div>
       )}
     </>
